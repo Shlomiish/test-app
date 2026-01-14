@@ -1,0 +1,47 @@
+name: Minikube Smoke Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start Minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          minikube-version: latest
+          kubernetes-version: v1.28.0
+
+      - name: Build images
+        run: |
+          eval $(minikube docker-env)
+          docker build -t demo-server:1 ./server
+          docker build -t demo-consumer:1 ./consumer
+          docker build -t demo-client:1 ./client
+          docker images | grep demo
+
+      - name: Deploy to Minikube
+        run: kubectl apply -f k8s-manifests.yaml
+
+      - name: Run smoke test
+        run: |
+          chmod +x smoke-test-final.sh
+          ./smoke-test-final.sh
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          echo "=== Pod Status ==="
+          kubectl get pods -n demo
+          echo "=== Server Logs ==="
+          kubectl logs -n demo -l app=server --tail=50
+          echo "=== Consumer Logs ==="
+          kubectl logs -n demo -l app=consumer --tail=50
