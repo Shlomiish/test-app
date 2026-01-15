@@ -24,8 +24,9 @@ jobs:
           ./scripts/minikube-build-images.sh
 
       - name: Deploy to Minikube
-        run: kubectl apply -R -f k8s-manifests/ # recursive run on all the folders inside
-
+        run: |
+          kubectl apply -f k8s-manifests/namespace/namespace.yaml # namespace first because when i run recursive, its not in the right order
+          kubectl apply -R -f k8s-manifests/
       - name: Run smoke test
         run: |
           chmod +x ./scripts/smoke-test.sh
