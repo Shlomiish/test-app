@@ -184,7 +184,6 @@ jobs:
             -Dsonar.sources=server,client
             -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/build/**,**/coverage/**
 
-
   smoke_minikube:
     name: Minikube smoke test
     runs-on: ubuntu-latest
@@ -196,7 +195,7 @@ jobs:
       - name: Start Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          minikube-version: latest n
+          minikube-version: latest
           kubernetes-version: v1.28.0
 
       - name: Build images
