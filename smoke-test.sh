@@ -57,7 +57,6 @@ echo ""
 echo "✓ smoke test passed"
 echo "→ open in browser: $BASE_URL"
 
-# ===================== ADDED: verify consumer consumes Kafka messages =====================
 echo ""
 echo "→ waiting for consumer pod..."
 kubectl wait --for=condition=ready pod -l app=consumer -n $NAMESPACE --timeout=${TIMEOUT}s
@@ -91,4 +90,3 @@ done
 
 kubectl logs -n $NAMESPACE deploy/consumer --since=240s | grep -q "Step: received" \
   || { echo "✗ consumer did not receive messages"; exit 1; }
-# ================================================================================ 
