@@ -5,6 +5,7 @@ on:
     workflows: ['CI']
     types: [completed]
     branches: [main]
+    workflow_dispatch:
 
 env:
   AWS_REGION: eu-north-1
