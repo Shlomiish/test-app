@@ -248,7 +248,7 @@ jobs:
       - name: Build client (static)
         working-directory: ./client
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Deploy client to S3
