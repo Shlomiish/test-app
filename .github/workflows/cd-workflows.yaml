@@ -153,9 +153,9 @@ jobs:
         run: |
           curl -f "$API_URL/api/health" || exit 1
 
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.CLIENT_URL }})
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$CLIENT_URL")
           [ "$HTTP_CODE" = "200" ] || exit 1
 
-          curl -f ${{ secrets.API_URL }}/api/button1 | grep -q '"ok":true' || exit 1
+          curl -f "$API_URL/api/button1" | grep -q '"ok":true' || exit 1
 
           echo "✅ All health checks passed"
